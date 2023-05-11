@@ -1,8 +1,9 @@
 import '../models/model.dart';
-import '../providers/forex_api_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final forexNotifierProvider =
+import '../providers/usdjpy_api_provider.dart';
+
+final usdjpyNotifierProvider =
     StateNotifierProvider.autoDispose<ForexNotifier, AsyncValue<MarketData>>(
         (ref) {
   return ForexNotifier(ref);
@@ -24,7 +25,7 @@ class ForexNotifier extends StateNotifier<AsyncValue<MarketData>> {
     try {
       final forexData = await _ref
           .read(
-            forexApiProvider,
+            usdjpyApiProvider,
           )
           .fetchForexData();
       state = AsyncValue.data(

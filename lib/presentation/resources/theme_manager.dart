@@ -9,7 +9,7 @@ ThemeData getApplicationTheme() {
     //main colors
     primaryColor: ColorManager.white,
     primaryColorDark: ColorManager.black,
-    disabledColor: ColorManager.gray,
+    disabledColor: ColorManager.grey,
     colorScheme:
         ColorScheme.fromSwatch().copyWith(secondary: ColorManager.black),
     //card view theme

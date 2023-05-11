@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:stonks_android/constants/constants.dart';
 import '../models/model.dart';
 
-final forexApiProvider = Provider.autoDispose<ForexApi>((
+final usdjpyApiProvider = Provider.autoDispose<ForexApi>((
   ref,
 ) {
   return ForexApi(
@@ -19,7 +19,7 @@ class ForexApi {
   Future<MarketData> fetchForexData() async {
     final response = await http.get(
       Uri.parse(
-        Urls.eurUsd,
+        Urls.usdJpy,
       ),
     );
     if (response.statusCode == 200) {

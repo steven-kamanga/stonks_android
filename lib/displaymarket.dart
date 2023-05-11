@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:stonks_android/presentation/resources/color_manager.dart';
 import 'package:stonks_android/presentation/resources/values_manager.dart';
 import 'package:stonks_android/providers/profile_provider.dart';
@@ -13,7 +12,7 @@ class MarketListView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    TextEditingController marketName = TextEditingController();
+    // Find the updated profile from the provider using the selectedProfile.id
     final updatedProfile = ref
         .watch(profileProvider)
         .firstWhere((profile) => profile.id == profileId.id);
@@ -26,30 +25,18 @@ class MarketListView extends ConsumerWidget {
         title: Text(updatedProfile.name!),
         actions: [
           IconButton(
-            icon: FaIcon(
-              FontAwesomeIcons.plus,
-              color: ColorManager.white,
-              size: 18,
-            ),
+            icon: const Icon(Icons.add),
             onPressed: () {
-              showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return AlertDialog(
-                    backgroundColor: ColorManager.gray,
-                    title: Text(
-                      'Select Market',
-                      style: TextStyle(
-                        color: ColorManager.white,
-                      ),
+              ref.read(profileProvider.notifier).addMarketToProfile(
+                    updatedProfile.id!,
+                    Market(
+                      marketName: 'USDJPY',
                     ),
                   );
-                },
-              );
             },
           ),
           const SizedBox(
-            width: 5,
+            width: 10,
           )
         ],
       ),
@@ -74,13 +61,15 @@ class MarketListView extends ConsumerWidget {
                   color: ColorManager.white,
                 ),
                 onPressed: () {
+                  // Find the profile index based on the profile ID
                   int profileIndex = ref
                       .read(profileProvider)
                       .indexWhere((profile) => profile.id == updatedProfile.id);
-                  ref.read(profileProvider.notifier).deleteProfile(
-                        profileIndex,
-                        updatedProfile.markets![index],
-                      );
+                  // Call the deleteMarketFromProfile function with the profile index
+                  // ref.read(profileProvider.notifier).deleteMarketFromProfile(
+                  //       profileIndex,
+                  //       updatedProfile.markets[index],
+                  //     );
                 },
               ),
             ),

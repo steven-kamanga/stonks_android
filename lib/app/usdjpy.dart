@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:stonks_android/presentation/resources/values_manager.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
-import '../notifiers/forex_notifier.dart';
+import '../notifiers/usdjpy_notifier.dart';
 
-class ForexChart extends ConsumerWidget {
-  const ForexChart({super.key});
+class UsdJpy extends ConsumerWidget {
+  const UsdJpy({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return ref.watch(forexNotifierProvider).when(
+    return ref.watch(usdjpyNotifierProvider).when(
           data: (data) {
             final dataPoints = data.timeSeriesFxDaily.entries
                 .map((e) => _ChartData(
@@ -20,13 +21,34 @@ class ForexChart extends ConsumerWidget {
                     ))
                 .toList();
 
+            DateTime minDate = dataPoints[0].date;
+            DateTime maxDate = dataPoints[0].date;
+
+            for (final data in dataPoints) {
+              if (data.date.isBefore(minDate)) {
+                minDate = data.date;
+              }
+              if (data.date.isAfter(maxDate)) {
+                maxDate = data.date;
+              }
+            }
+
+            final extraSpace =
+                Duration(days: 5); // Adjust the duration as needed
+            maxDate = maxDate.add(extraSpace);
+
             return SfCartesianChart(
+              margin: const EdgeInsets.only(right: AppPadding.p18),
+              backgroundColor: Theme.of(context).canvasColor,
               zoomPanBehavior: ZoomPanBehavior(
                   enablePanning: true,
                   enablePinching: true,
                   enableDoubleTapZooming: true),
               crosshairBehavior: CrosshairBehavior(enable: true),
-              primaryXAxis: DateTimeAxis(),
+              primaryXAxis: DateTimeAxis(
+                minimum: minDate,
+                maximum: maxDate,
+              ),
               primaryYAxis: NumericAxis(),
               series: <CandleSeries<_ChartData, DateTime>>[
                 CandleSeries<_ChartData, DateTime>(

@@ -159,4 +159,13 @@ class Market {
       marketName: map['marketName'],
     );
   }
+
+  Market copy({
+    int? id,
+    String? marketName,
+  }) =>
+      Market(
+        id: id ?? this.id,
+        marketName: marketName ?? this.marketName,
+      );
 }

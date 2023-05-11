@@ -21,7 +21,7 @@ class ProfileDatabase {
   Future<Database> _initDB(String filePath) async {
     final dbPath = await getDatabasesPath();
     final path = join(dbPath, filePath);
-    return await openDatabase(path, version: 1, onCreate: _createDB);
+    return await openDatabase(path, version: 2, onCreate: _createDB);
   }
 
   Future _createDB(Database db, int version) async {
@@ -33,6 +33,16 @@ class ProfileDatabase {
   )''';
 
     await db.execute(profileSql);
+
+    const marketSql = '''
+  CREATE TABLE markets (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    marketName TEXT NOT NULL,
+    profileId INTEGER,
+    FOREIGN KEY (profileId) REFERENCES profiles (id)
+  )''';
+
+    await db.execute(marketSql);
   }
 
   // Insert a new profile
@@ -69,5 +79,47 @@ class ProfileDatabase {
     const orderBy = 'name ASC';
     final result = await db.query('profiles', orderBy: orderBy);
     return result.map((json) => ProfileItem.fromMap(json)).toList();
+  }
+
+  // Create a new market
+  Future<Market> createMarket(Market market, int profileId) async {
+    final db = await instance.database;
+    final id = await db.insert('markets', {
+      'marketName': market.marketName,
+      'profileId': profileId,
+    });
+    return market.copy(id: id);
+  }
+
+// Update an existing market
+  Future<void> updateMarket(Market market) async {
+    final db = await instance.database;
+    await db.update(
+      'markets',
+      market.toMap(),
+      where: 'id = ?',
+      whereArgs: [market.id],
+    );
+  }
+
+// Delete a market
+  Future<void> deleteMarket(int id) async {
+    final db = await instance.database;
+    await db.delete(
+      'markets',
+      where: 'id = ?',
+      whereArgs: [id],
+    );
+  }
+
+// Get markets for a profile
+  Future<List<Market>> getMarketsForProfile(int profileId) async {
+    final db = await instance.database;
+    final result = await db.query(
+      'markets',
+      where: 'profileId = ?',
+      whereArgs: [profileId],
+    );
+    return result.map((map) => Market.fromMap(map)).toList();
   }
 }

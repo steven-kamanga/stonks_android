@@ -3,6 +3,7 @@ import '../data/db.dart';
 import '../models/model.dart';
 
 class ProfileNotifier extends StateNotifier<List<ProfileItem>> {
+  int _nextMarketId = 1;
   final ProfileDatabase _profileDatabase = ProfileDatabase.instance;
 
   ProfileNotifier() : super([]) {
@@ -15,6 +16,10 @@ class ProfileNotifier extends StateNotifier<List<ProfileItem>> {
   Future<void> _loadProfiles() async {
     _isLoading = true;
     final profiles = await _profileDatabase.getProfiles();
+    for (var profile in profiles) {
+      profile.markets =
+          await _profileDatabase.getMarketsForProfile(profile.id!);
+    }
     state = profiles;
     _isLoading = false;
   }
@@ -49,5 +54,18 @@ class ProfileNotifier extends StateNotifier<List<ProfileItem>> {
       print("Error: profile_notifier.dart");
       return Future.error(e);
     }
+  }
+
+  void addMarketToProfile(int? profileId, Market market) async {
+    final newMarket = await _profileDatabase.createMarket(market, profileId!);
+    state = state.map((profile) {
+      if (profile.id == profileId) {
+        return ProfileItem(
+            id: profile.id,
+            name: profile.name,
+            markets: [...profile.markets!, newMarket]);
+      }
+      return profile;
+    }).toList();
   }
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:stonks_android/app/eurusd.dart';
 import 'package:stonks_android/presentation/resources/color_manager.dart';
 import 'package:stonks_android/presentation/resources/values_manager.dart';
 import 'displaymarket.dart';
@@ -33,7 +34,7 @@ class ProfileListView extends ConsumerWidget {
                 context: context,
                 builder: (BuildContext context) {
                   return AlertDialog(
-                    backgroundColor: ColorManager.gray,
+                    backgroundColor: ColorManager.grey,
                     title: Text(
                       'Enter Portfolio Name',
                       style: TextStyle(
@@ -112,7 +113,9 @@ class ProfileListView extends ConsumerWidget {
                                           context,
                                           MaterialPageRoute(
                                             builder: (context) => MarketScreen(
-                                                marketId: market.id!),
+                                              marketId: market.id!,
+                                              market: market.marketName!,
+                                            ),
                                           ),
                                         );
                                       },
@@ -125,7 +128,7 @@ class ProfileListView extends ConsumerWidget {
                                                 right: AppPadding.p20,
                                               ),
                                               child: ListTile(
-                                                tileColor: ColorManager.gray,
+                                                tileColor: ColorManager.grey,
                                                 title: Text(
                                                   market.marketName!,
                                                   style: TextStyle(
@@ -155,6 +158,9 @@ class ProfileListView extends ConsumerWidget {
                                   builder: (context) => MarketListView(
                                       profileId: profiles[index]),
                                 ),
+                                // MaterialPageRoute(
+                                //   builder: (context) => ForexChart(),
+                                // ),
                               );
                             },
                           ),
