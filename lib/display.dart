@@ -1,85 +1,177 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:stonks_android/presentation/resources/color_manager.dart';
+import 'package:stonks_android/presentation/resources/values_manager.dart';
 import 'displaymarket.dart';
 import 'market.dart';
-import 'models/profile_item.dart';
-import 'profile_provider.dart';
+import 'models/model.dart';
+import 'providers/profile_provider.dart';
 
 class ProfileListView extends ConsumerWidget {
   const ProfileListView({super.key});
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    TextEditingController profileName = TextEditingController();
+    final isLoading = ref.watch(profileProvider.notifier).isLoading;
     final profiles = ref.watch(profileProvider);
     return Scaffold(
+      backgroundColor: ColorManager.black,
       appBar: AppBar(
-        title: const Text('Profiles'),
+        title: const Text('Portfolios'),
+        elevation: 0,
+        backgroundColor: ColorManager.black,
         actions: [
           IconButton(
-            icon: const Icon(Icons.add),
+            icon: FaIcon(
+              FontAwesomeIcons.plus,
+              color: ColorManager.white,
+              size: 18,
+            ),
             onPressed: () {
-              ref.read(profileProvider.notifier).addProfile(
-                    ProfileItem(
-                      name: 'New Profile',
-                      markets: [],
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    backgroundColor: ColorManager.gray,
+                    title: Text(
+                      'Enter Portfolio Name',
+                      style: TextStyle(
+                        color: ColorManager.white,
+                      ),
                     ),
+                    content: TextField(
+                      controller: profileName,
+                      decoration: const InputDecoration(
+                        hintStyle: TextStyle(
+                          fontSize: 12,
+                          color: Colors.white54,
+                        ),
+                        hintText: 'Portfolio Name',
+                      ),
+                    ),
+                    actions: [
+                      InkWell(
+                        onTap: () {
+                          ref.read(profileProvider.notifier).addProfile(
+                                ProfileItem(
+                                  name: profileName.text,
+                                  markets: [],
+                                ),
+                              );
+                          Navigator.of(context).pop();
+                        },
+                        child: Container(
+                          height: 25,
+                          width: 60,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(
+                              AppSize.s15,
+                            ),
+                            color: ColorManager.white,
+                          ),
+                          child: const Center(
+                            child: Text('Save'),
+                          ),
+                        ),
+                      ),
+                    ],
                   );
+                },
+              );
             },
           ),
         ],
       ),
-      body: ListView.builder(
-        itemCount: profiles.length,
-        itemBuilder: (context, index) {
-          return ExpansionTile(
-            title: Text(profiles[index].name),
-            trailing: IconButton(
-              icon: const Icon(Icons.remove_circle),
-              onPressed: () {
-                ref.read(profileProvider.notifier).deleteProfile(
-                      profiles[index],
-                    );
-              },
-            ),
-            children: [
-              Column(
-                children: profiles[index]
-                    .markets
-                    .map<Widget>(
-                      (market) => InkWell(
-                        onTap: () {
-                          // Navigate to the MarketScreen with the market.id
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  MarketScreen(marketId: market.id!),
-                            ),
-                          );
-                        },
-                        child: ListTile(
-                          title: Text(market.marketName),
-                        ),
+      body: !isLoading
+          ? ListView.builder(
+              itemCount: profiles.length,
+              itemBuilder: (context, index) {
+                return SizedBox(
+                  child: Column(
+                    children: [
+                      const SizedBox(
+                        height: 10,
                       ),
-                    )
-                    .toList(),
+                      ExpansionTile(
+                        title: Text(
+                          profiles[index].name!,
+                          style: TextStyle(
+                            color: ColorManager.white,
+                          ),
+                        ),
+                        children: [
+                          Column(
+                            children: profiles[index]
+                                .markets!
+                                .map<Widget>(
+                                  (market) => InkWell(
+                                      onTap: () {
+                                        // Navigate to the MarketScreen with the market.id
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) => MarketScreen(
+                                                marketId: market.id!),
+                                          ),
+                                        );
+                                      },
+                                      child: SizedBox(
+                                        child: Column(
+                                          children: [
+                                            Padding(
+                                              padding: const EdgeInsets.only(
+                                                left: AppPadding.p20,
+                                                right: AppPadding.p20,
+                                              ),
+                                              child: ListTile(
+                                                tileColor: ColorManager.gray,
+                                                title: Text(
+                                                  market.marketName!,
+                                                  style: TextStyle(
+                                                    color: ColorManager.white,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                            const SizedBox(
+                                              height: AppSize.s1,
+                                            )
+                                          ],
+                                        ),
+                                      )),
+                                )
+                                .toList(),
+                          ),
+                          IconButton(
+                            icon: Icon(
+                              Icons.add,
+                              color: ColorManager.white,
+                            ),
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => MarketListView(
+                                      profileId: profiles[index]),
+                                ),
+                              );
+                            },
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                );
+              },
+            )
+          : SizedBox(
+              child: Center(
+                child: CircularProgressIndicator(
+                  color: ColorManager.white,
+                ),
               ),
-              IconButton(
-                icon: const Icon(Icons.add),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) =>
-                          MarketListView(profileId: profiles[index]),
-                    ),
-                  );
-                },
-              ),
-            ],
-          );
-        },
-      ),
+            ),
     );
   }
 }

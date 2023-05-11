@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:stonks_android/app/forex_chart.dart';
 
 class MarketScreen extends StatelessWidget {
   final int marketId;
@@ -14,9 +15,7 @@ class MarketScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Market Screen'),
       ),
-      body: Center(
-        child: Text('Market ID: $marketId'),
-      ),
+      body: SizedBox(child: ForexChart()),
     );
   }
 }
