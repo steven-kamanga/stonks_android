@@ -13,9 +13,9 @@ class MarketListView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     // Find the updated profile from the provider using the selectedProfile.id
-    final updatedProfile = ref
-        .watch(profileProvider)
-        .firstWhere((profile) => profile.id == profileId.id);
+
+    final updatedProfile = ref.watch(profileProvider.select((profiles) =>
+        profiles.firstWhere((profile) => profile.id == profileId.id)));
 
     return Scaffold(
       backgroundColor: ColorManager.black,
@@ -27,12 +27,45 @@ class MarketListView extends ConsumerWidget {
           IconButton(
             icon: const Icon(Icons.add),
             onPressed: () {
-              ref.read(profileProvider.notifier).addMarketToProfile(
-                    updatedProfile.id!,
-                    Market(
-                      marketName: 'USDJPY',
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  var marketNames = [
+                    'EURUSD',
+                    'USDJPY',
+                  ];
+                  return AlertDialog(
+                    backgroundColor: ColorManager.grey,
+                    title: Text(
+                      'Select a Market',
+                      style: TextStyle(color: ColorManager.white),
+                    ),
+                    content: SingleChildScrollView(
+                      child: Column(
+                        children: marketNames.map((marketName) {
+                          return ListTile(
+                            title: Text(
+                              marketName,
+                              style: TextStyle(color: ColorManager.white),
+                            ),
+                            onTap: () {
+                              ref
+                                  .read(profileProvider.notifier)
+                                  .addMarketToProfile(
+                                    updatedProfile.id!,
+                                    Market(
+                                      marketName: marketName,
+                                    ),
+                                  );
+                              Navigator.of(context).pop();
+                            },
+                          );
+                        }).toList(),
+                      ),
                     ),
                   );
+                },
+              );
             },
           ),
           const SizedBox(
@@ -61,15 +94,11 @@ class MarketListView extends ConsumerWidget {
                   color: ColorManager.white,
                 ),
                 onPressed: () {
-                  // Find the profile index based on the profile ID
-                  int profileIndex = ref
-                      .read(profileProvider)
-                      .indexWhere((profile) => profile.id == updatedProfile.id);
-                  // Call the deleteMarketFromProfile function with the profile index
-                  // ref.read(profileProvider.notifier).deleteMarketFromProfile(
-                  //       profileIndex,
-                  //       updatedProfile.markets[index],
-                  //     );
+                  // Call the deleteMarketFromProfile function with the updatedProfile.id
+                  ref.read(profileProvider.notifier).deleteMarketFromProfile(
+                        updatedProfile.id,
+                        updatedProfile.markets![index].id!,
+                      );
                 },
               ),
             ),
@@ -78,4 +107,37 @@ class MarketListView extends ConsumerWidget {
       ),
     );
   }
+}
+
+void _showMarketListDialog(
+    BuildContext context, WidgetRef ref, ProfileItem updatedProfile) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      var marketNames = [
+        'EURUSD',
+        'USDJPY',
+      ];
+      return AlertDialog(
+        title: const Text('Select a Market'),
+        content: ListView.builder(
+          itemCount: marketNames.length,
+          itemBuilder: (BuildContext context, int index) {
+            return ListTile(
+              title: Text(marketNames[index]),
+              onTap: () {
+                ref.read(profileProvider.notifier).addMarketToProfile(
+                      updatedProfile.id!,
+                      Market(
+                        marketName: marketNames[index],
+                      ),
+                    );
+                Navigator.of(context).pop();
+              },
+            );
+          },
+        ),
+      );
+    },
+  );
 }

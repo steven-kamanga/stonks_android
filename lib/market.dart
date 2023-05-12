@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:stonks_android/app/eurusd.dart';
 import 'package:stonks_android/app/usdjpy.dart';
-
 import 'notifiers/theme_notifier.dart';
 
 class MarketScreen extends ConsumerWidget {
@@ -32,7 +31,11 @@ class MarketScreen extends ConsumerWidget {
               ref.read(themeNotifierProvider.notifier).toggleTheme();
             },
           ),
-          IconButton(onPressed: () {}, icon: const Icon(Icons.attach_money))
+          IconButton(
+              onPressed: () {
+                //Function to execute a market order
+              },
+              icon: const Icon(Icons.attach_money))
         ],
       ),
       body: SizedBox(
@@ -49,7 +52,9 @@ class MarketScreen extends ConsumerWidget {
         return const UsdJpy();
       //add more market cases here
       default:
-        return const Text('No chart available');
+        return const Center(
+          child: Text('No chart available'),
+        );
     }
   }
 }
