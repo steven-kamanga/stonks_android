@@ -5,9 +5,9 @@ import 'package:stonks_android/app/eurusd.dart';
 import 'package:stonks_android/presentation/resources/color_manager.dart';
 import 'package:stonks_android/presentation/resources/values_manager.dart';
 import 'displaymarket.dart';
-import 'market.dart';
-import 'models/model.dart';
-import 'providers/profile_provider.dart';
+import '../market.dart';
+import '../models/model.dart';
+import '../providers/profile_provider.dart';
 
 class ProfileListView extends ConsumerWidget {
   const ProfileListView({super.key});

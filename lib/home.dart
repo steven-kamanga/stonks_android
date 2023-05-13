@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:stonks_android/app/landing.dart';
 import 'package:stonks_android/notifiers/theme_notifier.dart';
 import 'app/nav_bar.dart';
-import 'display.dart';
+import 'app/display.dart';
 
 class Home extends ConsumerWidget {
   const Home({super.key});

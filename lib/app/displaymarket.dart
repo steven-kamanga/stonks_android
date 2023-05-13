@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:stonks_android/presentation/resources/color_manager.dart';
 import 'package:stonks_android/presentation/resources/values_manager.dart';
 import 'package:stonks_android/providers/profile_provider.dart';
-import 'models/model.dart';
+import '../models/model.dart';
 
 class MarketListView extends ConsumerWidget {
   final ProfileItem profileId;
@@ -31,8 +31,8 @@ class MarketListView extends ConsumerWidget {
                 context: context,
                 builder: (BuildContext context) {
                   var marketNames = [
-                    'EURUSD',
-                    'USDJPY',
+                    'MSM',
+                    'ART',
                   ];
                   return AlertDialog(
                     backgroundColor: ColorManager.grey,
