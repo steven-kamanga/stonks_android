@@ -1,11 +1,11 @@
 import '../models/model.dart';
-import '../providers/eurusd_api_provider.dart';
+import '../providers/eurjpy_api_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final eurusdNotifierProvider =
+final eurjpyNotifierProvider =
     StateNotifierProvider.autoDispose<ForexNotifier, AsyncValue<MarketData>>(
         (ref) {
-  return ForexNotifier(ref.watch(eurusdApiProvider.future));
+  return ForexNotifier(ref.watch(eurjpyApiProvider.future));
 });
 
 class ForexNotifier extends StateNotifier<AsyncValue<MarketData>> {

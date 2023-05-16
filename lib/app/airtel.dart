@@ -1,24 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:stonks_android/presentation/resources/values_manager.dart';
-import 'package:stonks_android/providers/company_provider.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
-import '../notifiers/usdjpy_notifier.dart';
-import '../providers/nico_provider.dart';
+import '../notifiers/eurjpy_notifier.dart';
+import '../providers/airtel_provider.dart';
 
-class UsdJpy extends ConsumerWidget {
-  const UsdJpy({Key? key}) : super(key: key);
+class AirtelMarket extends ConsumerWidget {
+  const AirtelMarket({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final companyInfo = ref.watch(nicoNotifierProvider);
-    final datas = ref.watch(usdjpyNotifierProvider);
+    final companyInfo = ref.watch(airtelNotifierProvider);
+    final datas = ref.watch(eurjpyNotifierProvider);
     final closePrice =
         datas.value?.timeSeriesFxDaily.entries.first.value.the4Close;
 
     final companyName = companyInfo?.companyName;
     final companyCeo = companyInfo?.mdCeo;
     final companyShares = companyInfo?.sharesInIssue;
+    final companyCap = companyInfo?.marketCapitalisation;
     final companyTransferSec = companyInfo?.transferSecretary;
 
     return SizedBox(
@@ -51,7 +51,7 @@ class UsdJpy extends ConsumerWidget {
                   ),
                   SizedBox(
                     height: 400,
-                    child: ref.watch(usdjpyNotifierProvider).when(
+                    child: ref.watch(eurjpyNotifierProvider).when(
                           data: (data) {
                             final dataPoints = data.timeSeriesFxDaily.entries
                                 .map((e) => _ChartData(
@@ -168,7 +168,19 @@ class UsdJpy extends ConsumerWidget {
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
-                          )
+                          ),
+                          const SizedBox(
+                            height: 5,
+                          ),
+                          SizedBox(
+                            child: Text(
+                              'Market Cap : $companyCap',
+                              style: const TextStyle(
+                                fontSize: AppSize.s15,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
                         ],
                       ),
                     ),

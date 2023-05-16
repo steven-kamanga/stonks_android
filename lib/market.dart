@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:stonks_android/app/airtel.dart';
 import 'package:stonks_android/app/eurusd.dart';
 import 'package:stonks_android/app/usdjpy.dart';
+import 'app/price_eurusd.dart';
 import 'notifiers/theme_notifier.dart';
 
 class MarketScreen extends ConsumerWidget {
@@ -33,7 +35,16 @@ class MarketScreen extends ConsumerWidget {
           ),
           IconButton(
               onPressed: () {
-                //Function to execute a market order
+                //navigate to order page
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => Order(
+                      marketId: marketId,
+                      market: market,
+                    ),
+                  ),
+                );
               },
               icon: const Icon(Icons.attach_money))
         ],
@@ -46,10 +57,12 @@ class MarketScreen extends ConsumerWidget {
 
   Widget _getChartWidget(String market) {
     switch (market) {
-      case 'EURUSD':
+      case 'ICON':
         return const EurUsd();
-      case 'USDJPY':
+      case 'NICO':
         return const UsdJpy();
+      case 'FMB':
+        return const AirtelMarket();
       //add more market cases here
       default:
         return const Center(

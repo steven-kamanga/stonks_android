@@ -1,0 +1,19 @@
+{
+  "company_name": "ICON PROPERTIES PLC - MWICON001146",
+  "address": "Victoria Avenue, Michiru House, P.O. Box 3117, Blantyre, Malawi.",
+  "telephone": "+265 (0)1 832 085/86",
+  "email": "info@iconproperties.mw",
+  "website": "www.iconproperties.mw",
+  "md_ceo": "Mrs Ellen Nyasulu",
+  "dof_cfo": "Nico Asset Managers Limited",
+  "company_secretary": {
+    "name": "Mr Kizito Kumwenda",
+    "email": "kizito.kumwenda@eris.co.mw"
+  },
+  "transfer_secretary": "Nico Asset Managers Limited",
+  "listing_date": "Monday, 21 January 2019",
+  "shares_in_issue": "6,680,000,000",
+  "listing_price": "MK8.75",
+  "price": {"value": "MK11.2600", "date_time": "Friday, 12 May 2023 14:30"},
+  "market_capitalisation": "MK75,216,800,000"
+}

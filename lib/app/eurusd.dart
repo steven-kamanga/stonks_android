@@ -3,12 +3,24 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:stonks_android/presentation/resources/values_manager.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import '../notifiers/eruusd_notifier.dart';
+import '../providers/company_provider.dart';
 
 class EurUsd extends ConsumerWidget {
   const EurUsd({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final companyInfo = ref.watch(companyInfoNotifierProvider);
+    final datas = ref.watch(eurusdNotifierProvider);
+    final closePrice =
+        datas.value?.timeSeriesFxDaily.entries.first.value.the4Close;
+
+    final companyName = companyInfo?.companyName;
+    final companyCeo = companyInfo?.mdCeo;
+    final companyShares = companyInfo?.sharesInIssue;
+    final companyEmail = companyInfo?.email;
+    final companyTransferSec = companyInfo?.transferSecretary;
+
     return SizedBox(
       height: MediaQuery.of(context).size.height * 0.9,
       child: Scaffold(
@@ -22,6 +34,21 @@ class EurUsd extends ConsumerWidget {
               ),
               child: Column(
                 children: [
+                  SizedBox(
+                    child: Align(
+                      alignment: Alignment.topLeft,
+                      child: Text(
+                        ' $closePrice MWK',
+                        style: const TextStyle(
+                          fontSize: AppSize.s35,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
                   SizedBox(
                     height: 400,
                     child: ref.watch(eurusdNotifierProvider).when(
@@ -88,6 +115,76 @@ class EurUsd extends ConsumerWidget {
                           error: (error, _) => Text('Error: $error'),
                         ),
                   ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  SizedBox(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SizedBox(
+                            child: Text(
+                              'Company Name : $companyName'.toUpperCase(),
+                              style: const TextStyle(
+                                fontSize: AppSize.s15,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 5,
+                          ),
+                          SizedBox(
+                            child: Text(
+                              'CEO : $companyCeo'.toUpperCase(),
+                              style: const TextStyle(
+                                fontSize: AppSize.s15,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 5,
+                          ),
+                          SizedBox(
+                            child: Text(
+                              'Email : $companyEmail',
+                              style: const TextStyle(
+                                fontSize: AppSize.s15,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 5,
+                          ),
+                          SizedBox(
+                            child: Text(
+                              'Shares In Issue : $companyShares',
+                              style: const TextStyle(
+                                fontSize: AppSize.s15,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 5,
+                          ),
+                          SizedBox(
+                            child: Text(
+                              'Transfer Secretary : $companyTransferSec',
+                              style: const TextStyle(
+                                fontSize: AppSize.s15,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  )
                 ],
               ),
             ),

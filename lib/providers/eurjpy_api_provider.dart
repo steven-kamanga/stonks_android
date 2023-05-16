@@ -3,8 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:stonks_android/constants/constants.dart';
 import '../models/model.dart';
 
-final eurusdApiProvider = FutureProvider.autoDispose<MarketData>((ref) async {
-  final response = await http.get(Uri.parse(Urls.eurUsd));
+final eurjpyApiProvider = FutureProvider.autoDispose<MarketData>((ref) async {
+  final response = await http.get(Uri.parse(Urls.eurJpy));
   if (response.statusCode == 200) {
     return marketDataFromJson(response.body);
   } else {

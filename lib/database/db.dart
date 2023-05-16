@@ -1,9 +1,8 @@
 import 'dart:async';
-import 'dart:convert';
-import 'package:flutter/widgets.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import '../models/model.dart';
+import '../models/trade_model.dart';
 
 class ProfileDatabase {
   static final ProfileDatabase instance = ProfileDatabase._init();
@@ -21,7 +20,7 @@ class ProfileDatabase {
   Future<Database> _initDB(String filePath) async {
     final dbPath = await getDatabasesPath();
     final path = join(dbPath, filePath);
-    return await openDatabase(path, version: 2, onCreate: _createDB);
+    return await openDatabase(path, version: 3, onCreate: _createDB);
   }
 
   Future _createDB(Database db, int version) async {
@@ -32,8 +31,6 @@ class ProfileDatabase {
     markets TEXT NOT NULL
   )''';
 
-    await db.execute(profileSql);
-
     const marketSql = '''
   CREATE TABLE markets (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -42,7 +39,23 @@ class ProfileDatabase {
     FOREIGN KEY (profileId) REFERENCES profiles (id)
   )''';
 
+    const tradeSql = '''
+  CREATE TABLE trades (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    type TEXT NOT NULL,
+    price REAL NOT NULL,
+    exitPrice REAL NULL,
+    quantity REAL NOT NULL,
+    date TEXT NOT NULL,
+    time TEXT NOT NULL,
+    marketId INTEGER,
+    FOREIGN KEY (marketId) REFERENCES markets (id)
+  )
+''';
+
+    await db.execute(profileSql);
     await db.execute(marketSql);
+    await db.execute(tradeSql);
   }
 
   // Insert a new profile
@@ -121,5 +134,39 @@ class ProfileDatabase {
       whereArgs: [profileId],
     );
     return result.map((map) => Market.fromMap(map)).toList();
+  }
+
+// Insert a trade
+  Future<int> insertTrade(Trade trade) async {
+    Database? db = await instance.database;
+    return await db.insert('trades', trade.toJson());
+  }
+
+// Update a trade
+  Future<int> updateTrade(Trade trade) async {
+    Database? db = await instance.database;
+    return await db.update(
+      'trades',
+      trade.toJson(),
+      where: 'id = ?',
+      whereArgs: [trade.id],
+    );
+  }
+
+// Delete a trade
+  Future<int> deleteTrade(int id) async {
+    Database? db = await instance.database;
+    return await db.delete(
+      'trades',
+      where: 'id = ?',
+      whereArgs: [id],
+    );
+  }
+
+// Get all trades
+  Future<List<Trade>> getTrades() async {
+    Database? db = await instance.database;
+    List<Map<String, dynamic>> result = await db.query('trades');
+    return result.map((map) => Trade.fromJson(map)).toList();
   }
 }

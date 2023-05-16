@@ -1,5 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../data/db.dart';
+import '../database/db.dart';
 import '../models/model.dart';
 
 class ProfileNotifier extends StateNotifier<List<ProfileItem>> {

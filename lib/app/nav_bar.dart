@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:stonks_android/app/landing.dart';
+import 'package:stonks_android/app/profile.dart';
 
 import '../presentation/resources/color_manager.dart';
+import 'display.dart';
 
 class NavBar extends StatefulWidget {
   const NavBar({super.key});
@@ -12,7 +14,11 @@ class NavBar extends StatefulWidget {
 }
 
 class _NavBarState extends State<NavBar> {
-  final List _pages = [const Landing(), const Landing()];
+  final List _pages = [
+    const Landing(),
+    const ProfileListView(),
+    const Profile(),
+  ];
   int _selectedIndex = 0;
 
   _navBottomBar(int index) {
@@ -41,14 +47,14 @@ class _NavBarState extends State<NavBar> {
           BottomNavigationBarItem(
             icon: FaIcon(
               size: 19,
-              FontAwesomeIcons.chartLine,
+              FontAwesomeIcons.solidNewspaper,
             ),
             label: "",
           ),
           BottomNavigationBarItem(
             icon: FaIcon(
               size: 19,
-              FontAwesomeIcons.solidNewspaper,
+              FontAwesomeIcons.chartLine,
             ),
             label: "",
           ),

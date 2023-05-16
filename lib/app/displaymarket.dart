@@ -31,8 +31,9 @@ class MarketListView extends ConsumerWidget {
                 context: context,
                 builder: (BuildContext context) {
                   var marketNames = [
-                    'MSM',
-                    'ART',
+                    'ICON',
+                    'NICO',
+                    'FMB',
                   ];
                   return AlertDialog(
                     backgroundColor: ColorManager.grey,
