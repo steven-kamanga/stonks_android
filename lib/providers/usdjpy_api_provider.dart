@@ -16,7 +16,7 @@ class ForexApi {
 
   ForexApi(this._ref);
 
-  Future<MarketData> fetchForexData() async {
+  Future<MarketData> fetchStockData() async {
     final response = await http.get(
       Uri.parse(
         Urls.usdJpy,

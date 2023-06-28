@@ -1,9 +1,7 @@
-// ignore_for_file: use_build_context_synchronously
 import 'dart:ui';
 import 'dart:convert';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:stonks_android/app/nav_bar.dart';
-import 'package:stonks_android/app/register.dart';
 import '../../presentation/resources/color_manager.dart';
 import '../../presentation/resources/font_manager.dart';
 import '../../presentation/resources/values_manager.dart';
@@ -11,21 +9,26 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:core';
+import 'package:validators/validators.dart';
+import 'landing.dart';
 
-class Login extends StatefulWidget {
-  const Login({super.key});
+class Register extends StatefulWidget {
+  const Register({super.key});
 
   @override
-  State<Login> createState() => _LoginState();
+  State<Register> createState() => _RegisterState();
 }
 
-class _LoginState extends State<Login> {
+class _RegisterState extends State<Register> {
   var click = false;
   GlobalKey<FormState> globalKey = GlobalKey<FormState>();
   GlobalKey<FormState> globalKey2 = GlobalKey<FormState>();
+  GlobalKey<FormState> globalKey3 = GlobalKey<FormState>();
+
   bool hasInternet = false;
   bool isLoading = false;
   TextEditingController emailController = TextEditingController();
+  TextEditingController nameController = TextEditingController();
   TextEditingController passController = TextEditingController();
   bool showPassword = false;
   int statcode = 0;
@@ -33,8 +36,8 @@ class _LoginState extends State<Login> {
 
   @override
   void initState() {
-    checkLogin();
     checkInternet();
+    checkLogin();
     super.initState();
   }
 
@@ -111,18 +114,67 @@ class _LoginState extends State<Login> {
                           bottom: 15,
                           top: AppPadding.p10),
                       child: Form(
+                        key: globalKey3,
+                        child: TextFormField(
+                          style: TextStyle(color: ColorManager.white),
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return "Field required";
+                            } else if (!isEmail(value.trim())) {
+                              return "Enter a valid email";
+                            } else {
+                              return null;
+                            }
+                          },
+                          controller: nameController,
+                          cursorColor: ColorManager.white,
+                          decoration: InputDecoration(
+                            enabledBorder: UnderlineInputBorder(
+                              borderSide:
+                                  BorderSide(color: ColorManager.lightGray),
+                            ),
+                            focusedBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: ColorManager.white),
+                            ),
+                            fillColor: Colors.transparent,
+                            filled: true,
+                            label: const Text("Name"),
+                            labelStyle: TextStyle(
+                              color: ColorManager.white,
+                              fontSize: FontSize.s16,
+                              fontWeight: FontWeight.w300,
+                              fontStyle: FontStyle.normal,
+                            ),
+                            hintStyle: TextStyle(
+                              color: ColorManager.white,
+                              fontSize: FontSize.s16,
+                              fontWeight: FontWeight.w200,
+                              fontStyle: FontStyle.normal,
+                            ),
+                            hintText: "name name",
+                          ),
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(
+                          left: AppPadding.p30,
+                          right: AppPadding.p30,
+                          bottom: 15,
+                          top: AppPadding.p10),
+                      child: Form(
                         key: globalKey,
                         child: TextFormField(
                           style: TextStyle(color: ColorManager.white),
-                          // validator: (value) {
-                          //   if (value!.isEmpty) {
-                          //     return "Field required";
-                          //   } else if (!isEmail(value.trim())) {
-                          //     return "Enter a valid email";
-                          //   } else {
-                          //     return null;
-                          //   }
-                          // },
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return "Field required";
+                            } else if (!isEmail(value.trim())) {
+                              return "Enter a valid email";
+                            } else {
+                              return null;
+                            }
+                          },
                           controller: emailController,
                           cursorColor: ColorManager.white,
                           decoration: InputDecoration(
@@ -216,11 +268,7 @@ class _LoginState extends State<Login> {
                                 globalKey.currentState?.validate();
                             final isValidForm2 =
                                 globalKey2.currentState?.validate();
-                            final isValidForm3 =
-                                globalKey2.currentState?.validate();
-                            if (isValidForm == true &&
-                                isValidForm2 == true &&
-                                isValidForm3 == true) {
+                            if (isValidForm == true && isValidForm2 == true) {
                               checkInternet();
                               setState(() => isLoading = true);
                               await Future.delayed(const Duration(seconds: 1));
@@ -263,34 +311,6 @@ class _LoginState extends State<Login> {
                         ),
                       ),
                     ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 13),
-                      child: Align(
-                        alignment: Alignment.bottomLeft,
-                        child: SizedBox(
-                          child: TextButton(
-                            onPressed: () {
-                              Navigator.of(context).pushAndRemoveUntil(
-                                MaterialPageRoute(
-                                  builder: ((context) => const Register()),
-                                ),
-                                (route) => false,
-                              );
-                            },
-                            child: const Text(
-                              "Register",
-                              style: TextStyle(
-                                color: Colors.grey,
-                                fontSize: 12,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    )
                   ],
                 ),
               ),
@@ -303,8 +323,7 @@ class _LoginState extends State<Login> {
 
   checkLogin() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
-    String? val = pref.getString("token");
-    print("Token: $val");
+    String? val = pref.getString("login");
     if (val != null) {
       Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(
@@ -323,21 +342,19 @@ class _LoginState extends State<Login> {
   }
 
   void login() async {
-    String baseUrl = "http://192.168.0.101:5000/api/v1/auth/login";
+    String baseUrl = "http://192.168.43.134:5000/api/v1/auth/register";
     var response = await http.post(Uri.parse(baseUrl),
         body: ({
+          'name': nameController.text,
           'email': emailController.text,
           'password': passController.text,
         }),
         headers: {
           "Accept": "application/json",
         });
-    // print(emailController.text);
-    // print(passController.text);
-
     // ignore: avoid_print
-    // print(response.statusCode.toString());
-    // print(response.body.toString());
+    print(response.statusCode.toString());
+    print(response.body.toString());
 
     final body = json.decode(response.body);
 
@@ -348,7 +365,7 @@ class _LoginState extends State<Login> {
       await Future.delayed(const Duration(seconds: 1));
       pageRoute(body["token"], body["name"], body["email"], body["_id"]);
       Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (context) => const NavBar()));
+          MaterialPageRoute(builder: (context) => const Landing()));
     } else if (response.statusCode >= 400 && response.statusCode <= 499) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -375,9 +392,10 @@ class _LoginState extends State<Login> {
 
   void pageRoute(String token, String name, String email, String id) async {
     SharedPreferences pref = await SharedPreferences.getInstance();
-    await pref.setString("token", token);
+    await pref.setString("login", token);
     await pref.setString("name", name);
     await pref.setString("email", email);
+    await pref.setString("password", passController.text);
     await pref.setString("_id", id);
   }
 }

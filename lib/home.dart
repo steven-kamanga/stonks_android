@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:stonks_android/app/login.dart';
 import 'package:stonks_android/notifiers/theme_notifier.dart';
 import 'app/nav_bar.dart';
 
@@ -10,7 +11,7 @@ class Home extends ConsumerWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ref.watch(themeNotifierProvider),
-      home: const NavBar(),
+      home: const Login(),
     );
   }
 }

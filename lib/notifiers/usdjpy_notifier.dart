@@ -3,31 +3,31 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../providers/usdjpy_api_provider.dart';
 
-final usdjpyNotifierProvider =
-    StateNotifierProvider.autoDispose<ForexNotifier, AsyncValue<MarketData>>(
+final marketNotifierProvider =
+    StateNotifierProvider.autoDispose<StockNotifier, AsyncValue<MarketData>>(
         (ref) {
-  return ForexNotifier(ref);
+  return StockNotifier(ref);
 });
 
-class ForexNotifier extends StateNotifier<AsyncValue<MarketData>> {
-  final AutoDisposeStateNotifierProviderRef<ForexNotifier,
+class StockNotifier extends StateNotifier<AsyncValue<MarketData>> {
+  final AutoDisposeStateNotifierProviderRef<StockNotifier,
       AsyncValue<MarketData>> _ref;
 
-  ForexNotifier(
+  StockNotifier(
     this._ref,
   ) : super(
           const AsyncValue.loading(),
         ) {
-    _fetchForexData();
+    _fetchStockData();
   }
 
-  Future<void> _fetchForexData() async {
+  Future<void> _fetchStockData() async {
     try {
       final forexData = await _ref
           .read(
             usdjpyApiProvider,
           )
-          .fetchForexData();
+          .fetchStockData();
       state = AsyncValue.data(
         forexData,
       );

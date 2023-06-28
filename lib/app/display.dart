@@ -9,80 +9,79 @@ import '../market.dart';
 import '../models/model.dart';
 import '../providers/profile_provider.dart';
 
-class ProfileListView extends ConsumerWidget {
-  const ProfileListView({super.key});
+class Portfolio extends ConsumerWidget {
+  const Portfolio({super.key});
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     TextEditingController profileName = TextEditingController();
     final isLoading = ref.watch(profileProvider.notifier).isLoading;
     final profiles = ref.watch(profileProvider);
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.grey[800],
+        child: FaIcon(
+          FontAwesomeIcons.plus,
+          color: ColorManager.white,
+          size: 18,
+        ),
+        onPressed: () {
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                backgroundColor: ColorManager.grey,
+                title: Text(
+                  'Enter Portfolio Name',
+                  style: TextStyle(
+                    color: ColorManager.white,
+                  ),
+                ),
+                content: TextField(
+                  controller: profileName,
+                  decoration: const InputDecoration(
+                    hintStyle: TextStyle(
+                      fontSize: 12,
+                      color: Colors.white54,
+                    ),
+                    hintText: 'Portfolio Name',
+                  ),
+                ),
+                actions: [
+                  InkWell(
+                    onTap: () {
+                      ref.read(profileProvider.notifier).addProfile(
+                            ProfileItem(
+                              name: profileName.text,
+                              markets: [],
+                            ),
+                          );
+                      Navigator.of(context).pop();
+                    },
+                    child: Container(
+                      height: 25,
+                      width: 60,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(
+                          AppSize.s15,
+                        ),
+                        color: ColorManager.white,
+                      ),
+                      child: const Center(
+                        child: Text('Save'),
+                      ),
+                    ),
+                  ),
+                ],
+              );
+            },
+          );
+        },
+      ),
       backgroundColor: ColorManager.black,
       appBar: AppBar(
         title: const Text('Portfolios'),
         elevation: 0,
         backgroundColor: ColorManager.black,
-        actions: [
-          IconButton(
-            icon: FaIcon(
-              FontAwesomeIcons.plus,
-              color: ColorManager.white,
-              size: 18,
-            ),
-            onPressed: () {
-              showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return AlertDialog(
-                    backgroundColor: ColorManager.grey,
-                    title: Text(
-                      'Enter Portfolio Name',
-                      style: TextStyle(
-                        color: ColorManager.white,
-                      ),
-                    ),
-                    content: TextField(
-                      controller: profileName,
-                      decoration: const InputDecoration(
-                        hintStyle: TextStyle(
-                          fontSize: 12,
-                          color: Colors.white54,
-                        ),
-                        hintText: 'Portfolio Name',
-                      ),
-                    ),
-                    actions: [
-                      InkWell(
-                        onTap: () {
-                          ref.read(profileProvider.notifier).addProfile(
-                                ProfileItem(
-                                  name: profileName.text,
-                                  markets: [],
-                                ),
-                              );
-                          Navigator.of(context).pop();
-                        },
-                        child: Container(
-                          height: 25,
-                          width: 60,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(
-                              AppSize.s15,
-                            ),
-                            color: ColorManager.white,
-                          ),
-                          child: const Center(
-                            child: Text('Save'),
-                          ),
-                        ),
-                      ),
-                    ],
-                  );
-                },
-              );
-            },
-          ),
-        ],
       ),
       body: !isLoading
           ? ListView.builder(
@@ -146,24 +145,30 @@ class ProfileListView extends ConsumerWidget {
                                 )
                                 .toList(),
                           ),
-                          IconButton(
-                            icon: Icon(
-                              Icons.add,
-                              color: ColorManager.white,
-                            ),
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => MarketListView(
-                                      profileId: profiles[index]),
+                          SizedBox(
+                            child: Row(
+                              children: [
+                                IconButton(
+                                  icon: Icon(
+                                    Icons.add,
+                                    color: ColorManager.white,
+                                  ),
+                                  onPressed: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => MarketListView(
+                                            profileId: profiles[index]),
+                                      ),
+                                      // MaterialPageRoute(
+                                      //   builder: (context) => ForexChart(),
+                                      // ),
+                                    );
+                                  },
                                 ),
-                                // MaterialPageRoute(
-                                //   builder: (context) => ForexChart(),
-                                // ),
-                              );
-                            },
-                          ),
+                              ],
+                            ),
+                          )
                         ],
                       ),
                     ],

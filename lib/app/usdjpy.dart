@@ -12,7 +12,7 @@ class UsdJpy extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final companyInfo = ref.watch(nicoNotifierProvider);
-    final datas = ref.watch(usdjpyNotifierProvider);
+    final datas = ref.watch(marketNotifierProvider);
     final closePrice =
         datas.value?.timeSeriesFxDaily.entries.first.value.the4Close;
 
@@ -51,7 +51,7 @@ class UsdJpy extends ConsumerWidget {
                   ),
                   SizedBox(
                     height: 400,
-                    child: ref.watch(usdjpyNotifierProvider).when(
+                    child: ref.watch(marketNotifierProvider).when(
                           data: (data) {
                             final dataPoints = data.timeSeriesFxDaily.entries
                                 .map((e) => _ChartData(

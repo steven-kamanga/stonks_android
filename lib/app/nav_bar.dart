@@ -15,8 +15,8 @@ class NavBar extends StatefulWidget {
 
 class _NavBarState extends State<NavBar> {
   final List _pages = [
-    const Landing(),
-    const ProfileListView(),
+    // const Landing(),
+    const Portfolio(),
     const Profile(),
   ];
   int _selectedIndex = 0;
@@ -55,13 +55,6 @@ class _NavBarState extends State<NavBar> {
             icon: FaIcon(
               size: 19,
               FontAwesomeIcons.chartLine,
-            ),
-            label: "",
-          ),
-          BottomNavigationBarItem(
-            icon: FaIcon(
-              size: 19,
-              FontAwesomeIcons.user,
             ),
             label: "",
           ),

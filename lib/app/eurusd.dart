@@ -76,7 +76,7 @@ class EurUsd extends ConsumerWidget {
                             }
 
                             const extraSpace = Duration(
-                                days: 5); // Adjust the duration as needed
+                                days: 5);
                             maxDate = maxDate.add(extraSpace);
 
                             return SfCartesianChart(

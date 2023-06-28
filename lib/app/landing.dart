@@ -11,9 +11,7 @@ class Landing extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    var isDark = ref.watch(themeNotifierProvider).brightness == Brightness.dark;
     var news = ref.watch(newsNotifierProvider);
-
     return Scaffold(
       backgroundColor: ColorManager.black,
       appBar: AppBar(
