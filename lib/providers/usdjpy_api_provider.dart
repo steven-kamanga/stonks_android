@@ -3,12 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:stonks_android/constants/constants.dart';
 import '../models/model.dart';
 
-final usdjpyApiProvider = Provider.autoDispose<ForexApi>((
-  ref,
-) {
-  return ForexApi(
-    ref,
-  );
+final usdjpyApiProvider = Provider.autoDispose<ForexApi>((ref) {
+  return ForexApi(ref);
 });
 
 class ForexApi {

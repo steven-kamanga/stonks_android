@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:stonks_android/app/display_orders.dart';
 import 'package:stonks_android/app/login.dart';
 import '../../presentation/resources/color_manager.dart';
 import '../../presentation/resources/font_manager.dart';
@@ -78,75 +79,6 @@ class _ProfileState extends State<Profile> {
                   bottom: AppSize.s10,
                 ),
               ),
-              // Padding(
-              //   padding: const EdgeInsets.all(13),
-              //   child: Container(
-              //     width: MediaQuery.of(context).size.width,
-              //     decoration: BoxDecoration(
-              //         color: ColorManager.grey,
-              //         borderRadius:
-              //             BorderRadius.all(Radius.circular(AppSize.s30))),
-              //     child: Column(
-              //       mainAxisAlignment: MainAxisAlignment.start,
-              //       crossAxisAlignment: CrossAxisAlignment.start,
-              //       children: [
-              //         Padding(
-              //           padding: const EdgeInsets.only(
-              //               left: AppSize.s18, top: AppSize.s15),
-              //           child: Text(
-              //             "Signed in as...",
-              //             style: TextStyle(
-              //                 fontFamily: FontConstants.fontFamily,
-              //                 fontWeight: FontWeightManager.medium,
-              //                 color: ColorManager.grey,
-              //                 fontSize: FontSize.s16),
-              //           ),
-              //         ),
-              //         Padding(
-              //           padding: const EdgeInsets.only(
-              //               top: AppPadding.p8, left: AppSize.s18, bottom: 20),
-              //           child: Row(
-              //             mainAxisAlignment: MainAxisAlignment.start,
-              //             children: [
-              //               Container(
-              //                 height: 50,
-              //                 width: 50,
-              //                 decoration: BoxDecoration(
-              //                     color: ColorManager.white,
-              //                     borderRadius:
-              //                         BorderRadius.all(Radius.circular(
-              //                       100,
-              //                     ))),
-              //                 child: Icon(
-              //                   Icons.person,
-              //                   color: ColorManager.black,
-              //                   size: AppSize.s30,
-              //                 ),
-              //               ),
-              //               // Padding(
-              //               //   padding: const EdgeInsets.all(10.0),
-              //               //   child: fname.isEmpty
-              //               //       ? Text(
-              //               //           "...",
-              //               //           style: TextStyle(
-              //               //               fontSize: FontSize.s16,
-              //               //               color: ColorManager.white),
-              //               //         )
-              //               //       : Column(
-              //               //           mainAxisAlignment:
-              //               //               MainAxisAlignment.start,
-              //               //           crossAxisAlignment:
-              //               //               CrossAxisAlignment.start,
-              //               //           children: [],
-              //               //         ),
-              //               // ),
-              //             ],
-              //           ),
-              //         )
-              //       ],
-              //     ),
-              //   ),
-              // ),
               Padding(
                 padding: const EdgeInsets.all(13),
                 child: Container(
@@ -215,6 +147,32 @@ class _ProfileState extends State<Profile> {
                         ),
                       ),
                       InkWell(
+                        onTap: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: ((context) => const DisplayAllTrades()),
+                            )),
+                        child: Padding(
+                          padding: const EdgeInsets.only(
+                              top: AppSize.s15,
+                              left: AppSize.s18,
+                              bottom: AppPadding.p5),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Text(
+                                "Users Trades",
+                                style: TextStyle(
+                                    fontFamily: FontConstants.fontFamily,
+                                    fontWeight: FontWeightManager.medium,
+                                    fontSize: FontSize.s16,
+                                    color: ColorManager.white),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      InkWell(
                         customBorder: const RoundedRectangleBorder(
                           borderRadius: BorderRadius.only(
                               bottomLeft: Radius.circular(AppSize.s30),
@@ -227,11 +185,6 @@ class _ProfileState extends State<Profile> {
                                   Text("Section currently not available..."),
                             ),
                           );
-                          // Navigator.push(
-                          //     context,
-                          //     MaterialPageRoute(
-                          //       builder: ((context) => Help()),
-                          //     ));
                         },
                         child: Padding(
                           padding: const EdgeInsets.only(

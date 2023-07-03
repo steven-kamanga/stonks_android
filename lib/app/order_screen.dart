@@ -64,7 +64,7 @@ class _OrderState extends ConsumerState<OrderProcessing> {
                         .value!.timeSeriesFxDaily.entries.first.value.the4Close;
 
                     return Text(
-                      'Bought $quantity of $market\n @ $closePrice MWK each',
+                      'Bought $quantity Shares of $market\n @ $closePrice MWK each',
                       style: const TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
@@ -95,7 +95,7 @@ class _OrderState extends ConsumerState<OrderProcessing> {
                                   .executeTrade(
                                     "Buy",
                                     double.parse(closePrice!),
-                                    200,
+                                    quantity.toDouble(),
                                     widget.marketId,
                                   );
                               AwesomeNotifications().createNotification(
@@ -104,6 +104,7 @@ class _OrderState extends ConsumerState<OrderProcessing> {
                                   channelKey: 'basic',
                                   title: 'Market Order Executed',
                                   body: 'Price: $closePrice MWK',
+                                  summary: 'Market: $market',
                                 ),
                               );
                               setState(() {

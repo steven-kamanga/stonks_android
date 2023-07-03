@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:stonks_android/presentation/resources/values_manager.dart';
-import 'package:stonks_android/providers/company_provider.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import '../notifiers/usdjpy_notifier.dart';
 import '../providers/nico_provider.dart';

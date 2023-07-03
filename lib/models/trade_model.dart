@@ -1,9 +1,9 @@
 class Trade {
   final int? id;
   final String type;
-  final String price;
+  final double price;
   final String? exitPrice;
-  final String quantity;
+  final double quantity;
   final String date;
   final String time;
   final int? marketId;

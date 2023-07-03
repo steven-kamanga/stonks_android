@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:stonks_android/app/eurusd.dart';
 import 'package:stonks_android/presentation/resources/color_manager.dart';
 import 'package:stonks_android/presentation/resources/values_manager.dart';
 import 'displaymarket.dart';
-import '../market.dart';
+import 'market.dart';
 import '../models/model.dart';
 import '../providers/profile_provider.dart';
 
@@ -146,27 +145,20 @@ class Portfolio extends ConsumerWidget {
                                 .toList(),
                           ),
                           SizedBox(
-                            child: Row(
-                              children: [
-                                IconButton(
-                                  icon: Icon(
-                                    Icons.add,
-                                    color: ColorManager.white,
+                            child: IconButton(
+                              icon: Icon(
+                                Icons.edit,
+                                color: ColorManager.white,
+                              ),
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => MarketListView(
+                                        profileId: profiles[index]),
                                   ),
-                                  onPressed: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => MarketListView(
-                                            profileId: profiles[index]),
-                                      ),
-                                      // MaterialPageRoute(
-                                      //   builder: (context) => ForexChart(),
-                                      // ),
-                                    );
-                                  },
-                                ),
-                              ],
+                                );
+                              },
                             ),
                           )
                         ],

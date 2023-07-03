@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:awesome_notifications/awesome_notifications.dart';
 import '../notifiers/eruusd_notifier.dart';
-import '../providers/trader_provider.dart';
 
 class Order extends ConsumerStatefulWidget {
   final int marketId;

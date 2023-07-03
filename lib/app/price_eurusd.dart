@@ -130,7 +130,7 @@ class _OrderState extends ConsumerState<Order> {
                                   .executeTrade(
                                     "Buy",
                                     double.parse(closePrice!),
-                                    200,
+                                    _quantity.toDouble(),
                                     widget.marketId,
                                   );
                               AwesomeNotifications().createNotification(

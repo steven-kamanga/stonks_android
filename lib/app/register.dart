@@ -83,17 +83,17 @@ class _RegisterState extends State<Register> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.only(left: AppPadding.p30),
+                    const Padding(
+                      padding: EdgeInsets.only(left: AppPadding.p30),
                       child: Row(
                         children: [
-                          const SizedBox(
+                          SizedBox(
                             width: 10,
                           ),
                           Column(
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.start,
-                            children: const [
+                            children: [
                               SizedBox(
                                 child: Text('Stonks Android',
                                     style: TextStyle(
@@ -323,7 +323,7 @@ class _RegisterState extends State<Register> {
 
   checkLogin() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
-    String? val = pref.getString("login");
+    String? val = pref.getString("token");
     if (val != null) {
       Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(
@@ -353,8 +353,6 @@ class _RegisterState extends State<Register> {
           "Accept": "application/json",
         });
     // ignore: avoid_print
-    print(response.statusCode.toString());
-    print(response.body.toString());
 
     final body = json.decode(response.body);
 
@@ -392,10 +390,9 @@ class _RegisterState extends State<Register> {
 
   void pageRoute(String token, String name, String email, String id) async {
     SharedPreferences pref = await SharedPreferences.getInstance();
-    await pref.setString("login", token);
+    await pref.setString("token", token);
     await pref.setString("name", name);
     await pref.setString("email", email);
-    await pref.setString("password", passController.text);
     await pref.setString("_id", id);
   }
 }

@@ -17,8 +17,8 @@ class TradeNotifier extends StateNotifier<List<Trade>> {
     Trade trade = Trade(
       id: DateTime.now().millisecondsSinceEpoch,
       type: type,
-      price: price.toString(),
-      quantity: quantity.toString(),
+      price: price.toDouble(),
+      quantity: quantity.toDouble(),
       date: DateTime.now().toIso8601String(),
       time: DateFormat('HH:mm:ss').format(DateTime.now()),
       marketId: marketId,
@@ -26,5 +26,19 @@ class TradeNotifier extends StateNotifier<List<Trade>> {
 
     await ProfileDatabase.instance.insertTrade(trade);
     state = [...state, trade];
+  }
+
+  Future<void> fetchAllTrades() async {
+    List<Trade> trades = await ProfileDatabase.instance.getTrades();
+    state = trades;
+  }
+
+  Future<void> deleteTrade(int? id) async {
+    if (id != null) {
+      await ProfileDatabase.instance.deleteTrade(id);
+      fetchAllTrades();
+    } else {
+      print('Cannot delete trade with null ID');
+    }
   }
 }
