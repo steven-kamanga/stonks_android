@@ -1,4 +1,4 @@
-const String apiKey = "6OWEJYO9Q16206O4";
+const String apiKey = "get_your_own😂😂";
 const String eur = "EUR";
 const String usd = "USD";
 const String jpy = "JPY";
